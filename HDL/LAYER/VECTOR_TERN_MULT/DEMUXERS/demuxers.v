@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // 	Atomic demuxer that 
 // 		Takes as input:
 // 			Two signed 8 bit integers:

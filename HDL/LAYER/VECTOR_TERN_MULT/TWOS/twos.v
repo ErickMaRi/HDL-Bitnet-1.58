@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // COMPLEMENTO DOS
 module twos_complement (
   input signed [7:0] a,
@@ -16,17 +17,17 @@ endmodule
 
 // PEINETA COMPLEMENTO DOS
 module twos_complement_list (
-  input logic clk,
-  input signed [7:0] data_in [4095:0], // Array of 4096 8-bit signed numbers
-  output reg signed [7:0] original_data [4095:0], // Original data list
-  output reg signed [7:0] twos_complement [4095:0] // Two's complement of the data list
+    input logic clk,
+    input signed [7:0] data_in [4095:0], // Array of 4096 8-bit signed numbers
+    output reg signed [7:0] original_data [4095:0], // Original data list
+    output reg signed [7:0] twos_complement [4095:0] // Two's complement of the data list
 );
 
   // Instantiate 4096 instances of the twos_complement module
   genvar i;
   generate
     for (i = 0; i < 4096; i = i + 1) begin
-      twos_complement #(8) instance_name (
+      twos_complement instance_name (
         .a(data_in[i]),
         .clk(clk),
         .neg_a(twos_complement[i]),
@@ -36,4 +37,3 @@ module twos_complement_list (
   endgenerate
 
 endmodule
-

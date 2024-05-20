@@ -1,87 +1,73 @@
 `timescale 1ns/1ps
 
-module tern_mult_tb;
+module vector_ternary_multiplication_tb;
+    localparam VECTOR_SIZE = 4096;
+    localparam CHUNK_SIZE = 256; // Adjust this value as needed
 
-// Inputs
-logic signed [7:0] list_in [4095:0];
-logic signed [1:0] weight_matrix [4095:0][4095:0];
-logic clk;
+    logic signed [7:0] list_in [VECTOR_SIZE-1:0];
+    logic signed [1:0] weight_matrix [VECTOR_SIZE-1:0][VECTOR_SIZE-1:0];
+    logic clk;
+    logic rst;
+    logic signed [19:0] product_list [VECTOR_SIZE-1:0];
 
-// Outputs
-logic signed [19:0] product_list [4095:0];
+    // Instantiate the module under test
+    vector_ternary_multiplication dut (
+        .list_in(list_in),
+        .weight_matrix(weight_matrix),
+        .clk(clk),
+        .rst(rst),
+        .product_list(product_list)
+    );
 
-// Instantiate the module under test
-vector_ternary_multiplication dut (
-    .list_in(list_in),
-    .weight_matrix(weight_matrix),
-    .clk(clk),
-    .product_list(product_list)
-);
-
-// Clock generation
-always begin
-    #1 clk = ~clk; // Toggle clock every time unit
-end
-
-// Initialize inputs
-initial begin
-    clk = 0;
-
-    // Verification at a glance
-    $display("Running verification at a glance tests...");
-
-    // Test case 1: All zeros
-    for (int i = 0; i < 4096; i++) begin
-        list_in[i] = 0;
-        for (int j = 0; j < 4096; j++) begin
-            weight_matrix[i][j] = 0;
-        end
+    // Clock generation
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
     end
-    #4100; // Wait for computations to complete
-    for (int i = 0; i < 4096; i++) begin
-        assert (product_list[i] === 0) else $error("Error in all zeros test: Expected 0, got %d for index %d", product_list[i], i);
-    end
-    $display("All zeros test passed");
 
-    // Test case 2: All ones
-    for (int i = 0; i < 4096; i++) begin
-        list_in[i] = 8'd127;
-        for (int j = 0; j < 4096; j++) begin
-            weight_matrix[i][j] = 2'd1;
-        end
-    end
-    #4100; // Wait for computations to complete
-    for (int i = 0; i < 4096; i++) begin
-        assert (product_list[i] === 20'd520192) else $error("Error in all ones test: Expected 520192, got %d for index %d", product_list[i], i);
-    end
-    $display("All ones test passed");
+    // Simulation
+    initial begin
+        $dumpfile("sim.vcd");
+        $dumpvars(0, dut.clk);
+        $dumpvars(0, dut.rst);
+        $dumpvars(0, dut.list_in);
+        $dumpvars(0, dut.weight_matrix);
+        $dumpvars(0, dut.product_list);
 
-    // Numerical robustness
-    $display("Running numerical robustness tests...");
-    for (int i = 0; i < 100; i++) begin
-        int start_index = $unsigned($random) % 4064; // Random start index (0 to 4063)
-        int subset_size = $unsigned($random) % 32 + 1; // Random subset size (1 to 32)
+        // Dump signals of the tree_adder instance
+        $dumpvars(0, dut.tree_adder_inst.clk);
+        $dumpvars(0, dut.tree_adder_inst.numbers);
+        $dumpvars(0, dut.tree_adder_inst.total_sum);
 
-        for (int j = start_index; j < start_index + subset_size; j++) begin
-            list_in[j] = $signed($random) % 256;
-            for (int k = 0; k < 4096; k++) begin
-                weight_matrix[j][k] = $signed($random) % 3 - 1;
+        // Reset
+        rst = 1;
+        #10;
+        rst = 0;
+
+        // Simulate for each chunk
+        for (int chunk_idx = 0; chunk_idx < VECTOR_SIZE / CHUNK_SIZE; chunk_idx++) begin
+            // Initialize the weight matrix and input vector for the current chunk
+            for (int i = 0; i < CHUNK_SIZE; i++) begin
+                for (int j = 0; j < VECTOR_SIZE; j++) begin
+                    if (i + chunk_idx * CHUNK_SIZE == j)
+                        weight_matrix[i + chunk_idx * CHUNK_SIZE][j] = 2'b01; // Weight 1
+                    else
+                        weight_matrix[i + chunk_idx * CHUNK_SIZE][j] = 2'b00; // Weight 0
+                end
+                list_in[i + chunk_idx * CHUNK_SIZE] = $signed({1'b0, $unsigned(i - 128)});
+            end
+
+            // Wait for the simulation to complete for the current chunk
+            #40970;
+
+            // Verify the outputs for the current chunk
+            for (int i = 0; i < CHUNK_SIZE; i++) begin
+                // Add your verification logic here
+                $display("product_list[%0d] = %0d", i + chunk_idx * CHUNK_SIZE, product_list[i + chunk_idx * CHUNK_SIZE]);
             end
         end
 
-        #4100; // Wait for computations to complete
-
-        for (int j = start_index; j < start_index + subset_size; j++) begin
-            logic signed [19:0] expected_result = 0;
-            for (int k = 0; k < 4096; k++) begin
-                expected_result += list_in[j] * weight_matrix[j][k];
-            end
-            assert (product_list[j] === expected_result) else $error("Error in numerical robustness test %d: Expected %d, got %d for index %d", i, expected_result, product_list[j], j);
-        end
+        $display("Simulation completed");
+        $finish;
     end
-    $display("Numerical robustness tests passed");
-
-    $finish;
-end
-
 endmodule

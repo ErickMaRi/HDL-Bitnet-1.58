@@ -1,7 +1,5 @@
 `timescale 1ns/1ps
-
 // SUMADOR DE N BITS DE SALIDA
-
 module int_adder #(parameter WIDTH = 8) (
     input clk,
     input signed [WIDTH-1:0] a,
@@ -16,10 +14,9 @@ end
 endmodule
 
 // ARBOL DE SUMADORES
-
 module tree_adder(
     input clk,
-    input signed [7:0] numbers[4095:0], // Array of 4096 8-bit signed numbers
+    input signed [7:0] numbers [4095:0], // Array of 4096 8-bit signed numbers
     output reg signed [19:0] total_sum // Correct output width to handle all possible values
 );
 
@@ -27,6 +24,7 @@ localparam LEVELS = 12;
 localparam NUMBERS = 4096;
 
 wire signed [20:0] sums [LEVELS:0][NUMBERS/2-1:0];
+
 genvar i, j;
 
 generate
@@ -36,21 +34,22 @@ generate
             .clk(clk),
             .a(numbers[2*j]),
             .b(numbers[2*j+1]),
-            .sum(sums[0][j])
+            .sum(sums[0][j]) // Correct the width
         );
     end
 
     // Handle subsequent levels
     for (i = 1; i < LEVELS; i++) begin : levels
-        localparam int WIDTH = 9 + i - 1; // Adjust input width for each level
-        localparam int OUT_WIDTH = WIDTH + 1; // Each sum should be one bit wider
+        localparam int WIDTH = 8 + i; // Input width for each level
+        localparam int OUT_WIDTH = WIDTH + 1; // Output width for each level
         localparam int NUM_PAIRS = NUMBERS >> (i + 1);
+
         for (j = 0; j < NUM_PAIRS; j++) begin : sum_pairs
             int_adder #(.WIDTH(WIDTH)) adder (
                 .clk(clk),
                 .a(sums[i-1][2*j][WIDTH-1:0]),
                 .b(sums[i-1][2*j+1][WIDTH-1:0]),
-                .sum(sums[i][j])
+                .sum(sums[i][j]) // Correct the width
             );
         end
     end
@@ -58,7 +57,7 @@ endgenerate
 
 // Assign the final output
 always @(*) begin
-    total_sum <= sums[LEVELS-1][0]; // Fetch the final result from the last array index
+    total_sum <= sums[LEVELS-1][0][19:0]; // Fetch the final result from the last array index
 end
 
 endmodule
