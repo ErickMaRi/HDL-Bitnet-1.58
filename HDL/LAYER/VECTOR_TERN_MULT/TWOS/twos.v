@@ -1,5 +1,8 @@
 `timescale 1ns/1ps
-// COMPLEMENTO DOS
+
+// twos.v contiene el módulo atómico para el complemento de dos de un número con signo
+// de ocho bits, presenta el valor original y su complemento coordinado con el reloj
+/* verilator lint_on MODDUP */
 module twos_complement (
   input signed [7:0] a,
   input logic clk,
@@ -13,9 +16,11 @@ always @(posedge clk) begin
 end
 
 endmodule
+/* verilator lint_off MODDUP */
 
-
-// PEINETA COMPLEMENTO DOS
+// realiza en paralelo el complemento de dos de 4096 números con signo de ocho bits
+// y presenta la salida y el valor original coordinado con el reloj
+/* verilator lint_on MODDUP */
 module twos_complement_list (
     input logic clk,
     input signed [7:0] data_in [4095:0], // Array of 4096 8-bit signed numbers
@@ -37,3 +42,4 @@ module twos_complement_list (
   endgenerate
 
 endmodule
+/* verilator lint_off MODDUP */

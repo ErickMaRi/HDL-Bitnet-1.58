@@ -1,0 +1,280 @@
+erick@am-38b1db33406b:~/Documents/HDL-Bitnet-1.58/HDL/LAYER/VECTOR_TERN_MULT$ make all
+verilator tern_mult.v ADDER/adder.v TWOS/twos.v --debug --gdbbt --unroll-count 4096 -cc -sv -o obj_dir/Vtern_mult
+No stack.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+Starting Verilator 4.038 2020-07-11 rev v4.036-114-g0cd4a57ad
+- Verilator.cpp:511:  Option --verilate: Start Verilation
+- V3File.cpp:224:        --check-times failed: no input obj_dir/Vtern_mult__verFiles.dat
+- V3ParseImp.cpp:276: parseFile: tern_mult
+  Preprocessing tern_mult.v
+- V3PreShell.cpp:148:     Reading tern_mult.v
+- V3PreShell.cpp:148:     Reading ADDER/adder.v
+- V3PreShell.cpp:148:     Reading TWOS/twos.v
+- V3ParseImp.cpp:325: Lexing tern_mult.v
+- V3ParseImp.cpp:276: parseFile: adder
+  Preprocessing ADDER/adder.v
+- V3PreShell.cpp:148:     Reading ADDER/adder.v
+- V3ParseImp.cpp:325: Lexing ADDER/adder.v
+- V3ParseImp.cpp:276: parseFile: twos
+  Preprocessing TWOS/twos.v
+- V3PreShell.cpp:148:     Reading TWOS/twos.v
+- V3ParseImp.cpp:325: Lexing TWOS/twos.v
+%Warning-MODDUP: ADDER/adder.v:6:8: Duplicate declaration of module: 'int_adder'
+    6 | module int_adder #(parameter WIDTH = 8) (
+      |        ^~~~~~~~~
+                 ADDER/adder.v:6:8: ... Location of original declaration
+    6 | module int_adder #(parameter WIDTH = 8) (
+      |        ^~~~~~~~~
+-node: MODULE 0x555555fbf9f0 <e3403#> {d6ai} u4=0x555555fbf460  int_adder  L0 [1ns]
+                 ... Use "/* verilator lint_off MODDUP */" and lint_on around source to disable this message.
+%Warning-MODDUP: ADDER/adder.v:25:8: Duplicate declaration of module: 'tree_adder'
+   25 | module tree_adder(
+      |        ^~~~~~~~~~
+                 ADDER/adder.v:25:8: ... Location of original declaration
+   25 | module tree_adder(
+      |        ^~~~~~~~~~
+-node: MODULE 0x555555fc83c0 <e3546#> {d25ai} u4=0x555555fc8500  tree_adder  L0 [1ns]
+%Warning-MODDUP: TWOS/twos.v:6:8: Duplicate declaration of module: 'twos_complement'
+    6 | module twos_complement (
+      |        ^~~~~~~~~~~~~~~
+                 TWOS/twos.v:6:8: ... Location of original declaration
+    6 | module twos_complement (
+      |        ^~~~~~~~~~~~~~~
+-node: MODULE 0x555556023b00 <e5609#> {e6ai} u4=0x555556023c40  twos_complement  L0 [1ns]
+%Warning-MODDUP: TWOS/twos.v:24:8: Duplicate declaration of module: 'twos_complement_list'
+   24 | module twos_complement_list (
+      |        ^~~~~~~~~~~~~~~~~~~~
+                 TWOS/twos.v:24:8: ... Location of original declaration
+   24 | module twos_complement_list (
+      |        ^~~~~~~~~~~~~~~~~~~~
+-node: MODULE 0x555556028f20 <e5730#> {e24ai} u4=0x555556029060  twos_complement_list  L0 [1ns]
+- V3LinkCells.cpp:200:Link Module: MODULE 0x555555f1a190 <e3#> {d6ai} u4=0x555555f19110  int_adder  L0 [1ns]
+- V3LinkCells.cpp:200:Link Module: MODULE 0x555555f2b4a0 <e138#> {d25ai} u4=0x555555f2b5e0  tree_adder  L0 [1ns]
+- V3LinkCells.cpp:200:Link Module: MODULE 0x555555f83c20 <e2193#> {e6ai} u4=0x555555f83d60  twos_complement  L0 [1ns]
+- V3LinkCells.cpp:200:Link Module: MODULE 0x555555f89380 <e2314#> {e24ai} u4=0x555555f894c0  twos_complement_list  L0 [1ns]
+- V3LinkCells.cpp:200:Link Module: MODULE 0x555555f932a0 <e2544#> {c6ai} u4=0x555555f933e0  vector_ternary_multiplication  L0 [1ns]
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_001_linkcells.dot
+- V3LinkLevel.cpp:45: modSortByLevel()
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_002_cells.tree
+- V3LinkDot.h:37:     linkDotPrimary: 
+- V3LinkJump.cpp:304: linkJump: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_007_link.tree
+- V3LinkInc.cpp:251:  linkIncrements: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_008_linkInc.tree
+- V3Param.cpp:855:    param: 
+- V3LinkDot.h:42:     linkDotParamed: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_010_paramlink.tree
+- V3Dead.cpp:470:     deadifyModules: 
+- V3Width.cpp:5390:   width: 
+%Warning-WIDTH: tern_mult.v:79:25: Bit extraction of array[4095:0] requires 12 bit index, not 13 bits.
+                                 : ... In instance vector_ternary_multiplication
+-node: ARRAYSEL 0x55555edb78a0 <e1852486#> {c79az} @dt=0x555555f99c80@(sw20)
+   79 |             product_list[cycle_count] = partial_sums;
+      |                         ^
+                tern_mult.v:4:1: ... note: In file included from tern_mult.v
+- V3Width.cpp:881:        Related node: ARRAYSEL 0x55555edb78a0 <e1852486#> {c79az} @dt=0x555555f99c80@(sw20)
+- V3Width.cpp:882:        Related dtype: BASICDTYPE 0x555555f99c80 <e1851240#> {c11am} @dt=this@(sw20)  logic kwd=logic range=[19:0]
+%Warning-WIDTH: tern_mult.v:81:25: Bit extraction of array[4095:0] requires 12 bit index, not 13 bits.
+                                 : ... In instance vector_ternary_multiplication
+-node: ARRAYSEL 0x55555edb8430 <e1852534#> {c81az} @dt=0x555555f99c80@(sw20)
+   81 |             product_list[cycle_count] = '0;  
+      |                         ^
+                tern_mult.v:4:1: ... note: In file included from tern_mult.v
+- V3Width.cpp:881:        Related node: ARRAYSEL 0x55555edb8430 <e1852534#> {c81az} @dt=0x555555f99c80@(sw20)
+- V3Width.cpp:882:        Related dtype: BASICDTYPE 0x555555f99c80 <e1851240#> {c11am} @dt=this@(sw20)  logic kwd=logic range=[19:0]
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_012_width.tree
+- V3Width.cpp:5433:   widthCommit: 
+- V3Const.cpp:2674:   constifyAllLive: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_014_const.tree
+- V3Undriven.cpp:468: undrivenAll: 
+- V3AssertPre.cpp:143:assertPreAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_015_assertpre.tree
+- V3Assert.cpp:406:   assertAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_016_assert.tree
+- V3LinkLevel.cpp:134:wrapTop: 
+- V3Const.cpp:2647:   constifyAllLint: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_018_const.tree
+- V3SplitVar.cpp:1263:splitVariable: 
+- V3Inst.cpp:615:     dearrayAll: 
+- V3LinkDot.h:47:     linkDotArrayed: 
+- V3Begin.cpp:308:    debeginAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_023_begin.tree
+- V3Tristate.cpp:1369:tristateAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_024_tristate.tree
+- V3Unknown.cpp:447:  unknownAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_025_unknown.tree
+- V3Inline.cpp:719:   inlineAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_026_inline.tree
+- V3LinkDot.h:47:     linkDotArrayed: 
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_028_const.tree
+- V3Dead.cpp:476:     deadifyDTypes: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_029_deadDtypes.tree
+- V3Inst.cpp:609:     instAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_030_inst.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_031_const.tree
+- V3Scope.cpp:416:    scopeAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_032_scope.tree
+- V3LinkDot.h:52:     linkDotScope: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_033_linkdot.tree
+- V3Class.cpp:134:    classAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_034_class.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_035_const.tree
+- V3Dead.cpp:482:     deadifyDTypesScoped: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_036_deadDtypesScoped.tree
+- V3Case.cpp:506:     caseAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_037_case.tree
+- V3Task.cpp:1571:    taskAll: 
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_038_task_call.dot
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_039_task.tree
+- V3Name.cpp:150:     nameAll: 
+- V3Unroll.cpp:511:   unrollAll: 
+- V3Unroll.cpp:64:       Can't Unroll: too many statements :WHILE 0x55558021bd40 <e3067> {c28aj}
+- V3Unroll.cpp:64:       Can't Unroll: too many statements :WHILE 0x55558021ef80 <e3272> {c45an}
+- V3Unroll.cpp:64:       Can't Unroll: too many statements :WHILE 0x55558021e010 <e3277> {c43aj}
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_041_unroll.tree
+- V3Slice.cpp:239:    sliceAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_042_slice.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_043_const.tree
+- V3Life.cpp:500:     lifeAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_044_life.tree
+- V3Table.cpp:481:    tableAll: 
+- V3Simulate.h:348:   Unknown node type in SimulateVisitor: WHILE
+- V3Simulate.h:348:   Unknown node type in SimulateVisitor: WHILE
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_045_table.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_046_const.tree
+- V3Dead.cpp:482:     deadifyDTypesScoped: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_047_deadDtypesScoped.tree
+- V3Active.cpp:427:   activeAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_048_active.tree
+- V3Split.cpp:989:    splitAlwaysAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_049_split.tree
+- V3SplitAs.cpp:205:  splitAsAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_050_splitas.tree
+- V3Gate.cpp:1630:    gateAll: 
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_051_gate_simp.dot
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_052_gate_opt.dot
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_053_gate.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_054_const.tree
+- V3Dead.cpp:495:     deadifyAllScoped: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_055_deadAllScoped.tree
+- V3Split.cpp:984:    splitReorderAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_056_reorder.tree
+- V3Delayed.cpp:497:  delayedAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_057_delayed.tree
+- V3ActiveTop.cpp:141:activeTopAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_058_activetop.tree
+- V3Order.cpp:2025:   orderAll: 
+- V3Order.cpp:960:      Loading tree...
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_059_orderg_pre.dot
+- V3Order.cpp:1966:     Acyclic & Order...
+- V3GraphAcyc.cpp:584:Acyclic
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_060_acyc_simp.dot
+- V3GraphAcyc.cpp:565: Cutting trivial loops
+- V3GraphAcyc.cpp:569: Ranking
+- V3GraphAcyc.cpp:573: Placement
+- V3GraphAcyc.cpp:464:    Cutable edges = 0
+- V3GraphAcyc.cpp:577: Final Ranking
+- V3GraphAcyc.cpp:587:Acyclic done
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_061_orderg_acyc.dot
+- V3GraphAlg.cpp:528: Order:
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_062_orderg_order.dot
+- V3Order.cpp:1978:     Process Clocks...
+- V3Order.cpp:1981:     Process Circulars...
+- V3Order.cpp:1985:     Domains...
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_063_orderg_domain.dot
+- V3Order.cpp:1992:     Construct Move Graph...
+- V3Order.cpp:2000:     Move...
+- V3Order.cpp:2008:     Sensitive...
+dot -Tpdf -o ~/a.pdf obj_dir/Vtern_mult_065_orderg_done.dot
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_066_order.tree
+- V3GenClk.cpp:233:   genClkAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_067_genclk.tree
+- V3Clock.cpp:428:    clockAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_068_clock.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_069_const.tree
+- V3Life.cpp:500:     lifeAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_070_life.tree
+- V3LifePost.cpp:366: lifepostAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_071_life_post.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_072_const.tree
+- V3Dead.cpp:495:     deadifyAllScoped: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_073_deadAllScoped.tree
+- V3Changed.cpp:297:  changedAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_074_changed.tree
+- V3Descope.cpp:311:  descopeAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_075_descope.tree
+- V3Localize.cpp:237: localizeAll: 
+- V3Combine.cpp:478:  combineAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_077_combine.tree
+- V3Const.cpp:2684:   constifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_078_const.tree
+- V3Dead.cpp:489:     deadifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_079_deadAll.tree
+- V3Clean.cpp:314:    cleanAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_080_clean.tree
+- V3Premit.cpp:421:   premitAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_081_premit.tree
+- V3Expand.cpp:895:   expandAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_082_expand.tree
+- V3Const.cpp:2656:   constifyCpp: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_083_const_cpp.tree
+- V3Subst.cpp:392:    substituteAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_084_subst.tree
+- V3Const.cpp:2656:   constifyCpp: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_085_const_cpp.tree
+- V3Dead.cpp:489:     deadifyAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_086_deadAll.tree
+- V3MergeCond.cpp:343:mergeAll: 
+- V3Reloop.cpp:264:   reloopAll: 
+- V3Depth.cpp:170:    depthAll: 
+- V3Branch.cpp:131:   branchAll: 
+- V3Cast.cpp:203:     castAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_090_cast.tree
+- V3CCtors.cpp:139:   cctorsAll: 
+- V3CUse.cpp:222:     cUseAll: 
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_091_cuse.tree
+- V3EmitCInlines.cpp:69:emitcInlines: 
+- V3EmitCSyms.cpp:947:emitcSyms: 
+- V3EmitC.cpp:3836:   emitcTrace: 
+- V3EmitC.cpp:3822:   emitc: 
+- V3EmitXml.cpp:378:  emitxml: 
+- V3StatsReport.cpp:231:statsReport: 
+- V3EmitMk.cpp:280:   emitmk: 
+- V3Os.cpp:85:        export VERILATOR_ROOT=/usr/share/verilator # Hardcoded at build time
+- V3Os.cpp:85:        export SYSTEMC_ARCH=linux # From sysname 'linux'
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_990_final.tree
+%Error: Exiting due to 6 warning(s)
+- V3Ast.cpp:1121:     Dumping obj_dir/Vtern_mult_990_final.tree
+- V3StatsReport.cpp:231:statsReport: 
+%Error: Aborting since under --debug
+
+Program received signal SIGABRT, Aborted.
+__GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+50	../sysdeps/unix/sysv/linux/raise.c: No such file or directory.
+#0  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:50
+#1  0x00007ffff7c94537 in __GI_abort () at abort.c:79
+#2  0x0000555555739719 in ?? ()
+#3  0x00005555558d3be1 in ?? ()
+#4  0x00005555557538b7 in ?? ()
+#5  0x00005555558d43d0 in ?? ()
+#6  0x000055555574ba1b in ?? ()
+#7  0x00007ffff7c95d0a in __libc_start_main (main=0x55555574b550, argc=12, argv=0x7fffffffdf28, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7fffffffdf18) at ../csu/libc-start.c:308
+#8  0x0000555555752d8a in ?? ()
+A debugging session is active.
+
+	Inferior 1 [process 6881] will be killed.
+
+Quit anyway? (y or n) [answered Y; input not from terminal]
+%Error: export VERILATOR_ROOT=
+%Error: gdb /usr/bin/verilator_bin_dbg --batch --quiet --return-child-result -ex "run tern_mult.v ADDER/adder.v TWOS/twos.v --debug --gdbbt --unroll-count 4096 -cc -sv -o obj_dir/Vtern_mult" -ex 'set width 0' -ex 'bt' -ex 'quit'
+%Error: Command Failed gdb /usr/bin/verilator_bin_dbg --batch --quiet --return-child-result -ex "run tern_mult.v ADDER/adder.v TWOS/twos.v --debug --gdbbt --unroll-count 4096 -cc -sv -o obj_dir/Vtern_mult" -ex 'set width 0' -ex 'bt' -ex 'quit'
+make: *** [Makefile:21: compile] Error 255

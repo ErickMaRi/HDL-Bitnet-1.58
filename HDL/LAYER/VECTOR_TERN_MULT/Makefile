@@ -1,47 +1,33 @@
 # Verilog source files
-VERILOG_SOURCES = tern_mult.v DEMUXERS/demuxers.v TWOS/twos.v ADDER/adder.v
-
-# Testbench source files
-TESTBENCH_SOURCES = tern_mult_tb.v
+VERILOG_SOURCES = tern_mult.v ADDER/adder.v TWOS/twos.v
 
 # Simulation parameters
 SIM_TIME = 100ns
 
 # Simulation commands
 SIMULATOR = verilator
-SIMULATOR_FLAGS = --cc --unroll-count 500000 --trace --exe
-SIMULATOR_EXECUTABLE = ./obj_dir/Vtern_mult_tb
+SIMULATOR_FLAGS = --debug --gdbbt --unroll-count 4096 -cc -sv -o obj_dir/Vtern_mult
+
+SIMULATOR_EXECUTABLE = ./obj_dir/Vtern_mult
 
 # Waveform viewer command
 WAVEFORM_VIEWER = gtkwave
 
-# Synthesis commands with Yosys
-YOSYS = yosys
-
 # Default target
-all: compile simulate synthesize test waveforms
+all: compile simulate
 
 # Compile Verilog files
 compile:
-	$(SIMULATOR) $(SIMULATOR_FLAGS) --top-module vector_ternary_multiplication_tb $(VERILOG_SOURCES) $(TESTBENCH_SOURCES)
+	$(SIMULATOR) $(VERILOG_SOURCES) $(SIMULATOR_FLAGS)
 
-# Run simulation with original code
+# Run simulation
 simulate: compile
-	$(SIMULATOR_EXECUTABLE)
-
-# Synthesize with Yosys
-synthesize:
-	echo "read_verilog $(VERILOG_SOURCES); hierarchy -top vector_ternary_multiplication; proc; opt; fsm; opt; memory; opt; techmap; opt; abc -g NAND; flatten; write_verilog synth_tern_mult.v" | $(YOSYS)
-
-# Test synthesized design
-test: synthesize
-	$(SIMULATOR) $(SIMULATOR_FLAGS) --top-module vector_ternary_multiplication_tb synth_tern_mult.v $(TESTBENCH_SOURCES)
-	$(SIMULATOR_EXECUTABLE)
+	./obj_dir/Vtern_mult
 
 # View waveforms
 waveforms:
-	$(WAVEFORM_VIEWER) tern_mult_tb.vcd
+	$(WAVEFORM_VIEWER) sim.vcd
 
 # Clean generated files
 clean:
-	rm -rf obj_dir tern_mult_tb.vcd synth_tern_mult.v
+	rm -rf obj_dir sim.vcd
