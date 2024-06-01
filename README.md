@@ -22,6 +22,8 @@ Lo anterior implica que nuestro controlador tendría 4096 puertos de un bit para
 
 Es importante implementar el módulo de forma parametrizada, de manera en la que las dimensiones de la matriz/vector sean ajustables, con el fin de serializar varias de estas operaciones y calcular las proyecciones del vector de embeddings para los Queries, Keys y Values (obtenidos de un producto **Q** = **X** * **W_Q**, por ejemplo).
 
+Siguiendo un principio de memoria on edge, es necesario tener dos bancos de memorias, uno para las activaciones y otro para los pesos, controlado por un módulo que coordina la lectura y escritura de los valores, siendo este controlador accesado por un puerto que se comunica con protocolo I2C o SPI al mundo exterior. El controlador tiene la capacidad de seleccionar la entrada ya sea para la escritura en la memoria o para presentar los datos a la lectura del maestro de los escalares.
+
 *Función de activación:*
 
   Se implementará ReLU por simpleza pero la función que se va a usar es SwiGLU, con una entrada de 20 bits y una salida de ocho bits, ambos con signo.
