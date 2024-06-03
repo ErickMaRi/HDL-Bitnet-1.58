@@ -2,15 +2,15 @@
 
 **Descripción General**
 
-Este proyecto Verilog HDL busca implementar una capa de transformador siguiendo la arquitectura usada en LLAMA 2 para un modelo cuantizado a dos bits para la matriz de pesos (-1, 0 , 1) y un vector de 4096 activaciones de ocho bits con signo. Para implementar este diseño se busca trabajar dentro de los márgenes de lo sintetizable y bitstreameable a FPGA para efectivamente tener un acelerador para la inferencia únicamente (los pesos del modelo se toman como dados).
+Este proyecto en Verilog HDL busca implementar una capa de transformador siguiendo la arquitectura usada en LLAMA 2 para un modelo cuantizado a dos bits para la matriz de pesos (-1, 0 , 1) y un vector de 4096 activaciones de ocho bits con signo. Para implementar este diseño se busca trabajar dentro de los márgenes de lo sintetizable y bitstreameable a FPGA para efectivamente tener un acelerador para la inferencia únicamente (los pesos del modelo se toman como dados).
 
 **Arquitectura Actual**
 
-Actualmente el diseño descrito en Verilog presenta una guía conceptual que servirá para optimizar el diseño a un floorplan decente. Se usa un árbol de sumadores (de doce capas) para coordinar la suma de todos los vectores de activación, habiendo sido ya multiplicados por la matriz de pesos. Hasta el momento lo implementado es la multiplicación ternaria.
+El actual diseño descrito en Verilog presenta una guía conceptual que servirá para optimizar el diseño a un floorplan decente. Se usa un árbol de sumadores (de doce capas) para coordinar la suma de todos los vectores de activación, habiendo sido ya multiplicados por la matriz de pesos. Hasta el momento lo implementado es la multiplicación ternaria.
 
 **Arquitectura a desarrollar**
 
-Con el fin de optimizar para un floorplan hacible es necesario cambiar fundamentalmente la estrategia tomada para implementar el módulo, con este fin es necesario cambiar la manera en la que se comunica la información, alambrando muchos menos puertos entre sí, para fines de poder simular y verificar en una laptop además de presentar un diseño menos sobreingeniado.
+Con el fin de optimizar para un floorplan realista es necesario cambiar fundamentalmente la estrategia tomada para implementar el módulo, con este fin es necesario cambiar la manera en la que se comunica la información, alambrando muchos menos puertos entre sí, para fines de poder simular y verificar en equipos accesibles.
 
 *Multiplicación ternaria:*
 Se le llama activación al vector de entradas de ocho bits, pesos a la matriz de entradas de dos bits y escalares a cada una de las salidas del producto ternario.
